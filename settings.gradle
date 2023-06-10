@@ -20,14 +20,14 @@ dependencyResolutionManagement {
 			def mc = mc_major + '.2'
 
 			// // Build Tools // //
-			version('loom', '1.1.+')
+			version('loom', '1.2.+')
 
 			plugin('loom', 'org.quiltmc.loom').versionRef('loom')
 
 			// // Base // //
 			version('mc', mc)
 			version('ql', "0.17.10")
-			version('qm', "${mc}+build.21")
+			version('qm', "${mc}+build.22")
 
 			library('mc', 'mojang', 'minecraft').versionRef('mc')
 			library('ql', 'org.quiltmc', 'quilt-loader').versionRef('ql')

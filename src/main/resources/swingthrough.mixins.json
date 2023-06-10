@@ -4,7 +4,7 @@
   "package": "folk.sisby.swingthrough.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "client.MinecraftClientMixin"
+    "client.GameRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
