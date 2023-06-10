@@ -1,4 +1,4 @@
-<center>Allows hitting living entities through transparent blocks.
+<center>Allows targeting living entities through transparent blocks.
 </center>
 
 ---

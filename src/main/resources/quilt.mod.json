@@ -6,7 +6,7 @@
 		"version": "${version}",
 		"metadata": {
 			"name": "SwingThrough",
-			"description": "Allows hitting living entities through transparent blocks",
+			"description": "Allows targeting living entities through transparent blocks",
 			"contributors": {
 				"Sisby Folk": "Co-Authors"
 			},
