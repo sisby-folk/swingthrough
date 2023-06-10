@@ -1,0 +1,29 @@
+{
+	"schema_version": 1,
+	"quilt_loader": {
+		"group": "folk.sisby",
+		"id": "swingthrough",
+		"version": "${version}",
+		"metadata": {
+			"name": "SwingThrough",
+			"description": "Allows hitting living entities through transparent blocks",
+			"contributors": {
+				"Sisby Folk": "Co-Authors"
+			},
+			"contact": {
+				"homepage": "https://modrinth.com/mod/swingthrough",
+				"issues": "https://github.com/sisby-folk/swingthrough/issues",
+				"sources": "https://github.com/sisby-folk/swingthrough"
+			},
+			"icon": "assets/swingthrough/icon.png"
+		},
+		"intermediate_mappings": "net.fabricmc:intermediary",
+		"depends": [
+			{
+				"id": "minecraft",
+				"versions": ">=${mc}"
+			}
+		]
+	},
+	"mixin": "swingthrough.mixins.json"
+}

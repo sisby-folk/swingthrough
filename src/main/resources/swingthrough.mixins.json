@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "folk.sisby.swingthrough.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "client.MinecraftClientMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}
