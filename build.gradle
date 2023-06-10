@@ -48,6 +48,7 @@ processResources {
 
 	inputs.properties(map)
 	filesMatching('quilt.mod.json') { expand(map) }
+	filesMatching('fabric.mod.json') { expand(map) }
 }
 
 tasks.withType(JavaCompile).configureEach {
