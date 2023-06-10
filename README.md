@@ -8,3 +8,9 @@
 
 ---
 
+This mod discards the block crosshair target to allow an entity to be targeted instead, when:
+   - The block has empty collision
+   - The entity is living and attackable
+   - You're not directly riding the entity
+   - The entity isn't your own tamed entity
+   - The entity is within reach (*slightly* longer than actual attack range, but still usable)
