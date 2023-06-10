@@ -14,3 +14,5 @@ This mod discards the block crosshair target to allow an entity to be targeted i
    - You're not directly riding the entity
    - The entity isn't your own tamed entity
    - The entity is within reach (*slightly* longer than actual attack range, but still usable)
+
+The block outline will visually disappear when you're targeting the entity instead.
