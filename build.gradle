@@ -44,8 +44,6 @@ dependencies {
 processResources {
 	final Map<String, String> map = [
 		"version"        : version.toString(),
-		"mc"             : libs.versions.mc.get(),
-		"ql"             : libs.versions.ql.get()
 	]
 
 	inputs.properties(map)
@@ -88,7 +86,7 @@ if (System.getenv("MODRINTH_TOKEN")) {
 		versionType = 'release'
 		uploadFile = remapJar
 		gameVersions = [mc]
-		loaders = ['quilt']
+		loaders = ['quilt', 'fabric']
 		detectLoaders = false
 		dependencies {
 		}

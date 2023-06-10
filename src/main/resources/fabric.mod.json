@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "swingthrough",
+  "version": "${version}",
+
+  "name": "SwingThrough",
+  "description": "Allows targeting living entities through transparent blocks",
+  "authors": [
+    "Sisby Folk"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/swingthrough",
+    "issues": "https://github.com/sisby-folk/swingthrough/issues",
+    "sources": "https://github.com/sisby-folk/swingthrough"
+  },
+
+  "license": "LGPL-3.0-only",
+  "icon": "assets/swingthrough/icon.png",
+
+  "environment": "*",
+
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "minecraft": ">=1.15",
+    "java": ">=17"
+  },
+  "mixins": [
+    "swingthrough.mixins.json"
+  ]
+}

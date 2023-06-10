@@ -16,3 +16,9 @@ This mod discards the block crosshair target to allow an entity to be targeted i
    - The entity is within reach (*slightly* longer than actual attack range, but still usable)
 
 The block outline will visually disappear when you're targeting the entity instead.
+
+## Afterword
+
+All mods are built on the work of many others.
+
+We made this mod for [Tinkerer's Quilt](https://modrinth.com/modpack/tinkerers-quilt) - our modpack about ease of play and vanilla content.
