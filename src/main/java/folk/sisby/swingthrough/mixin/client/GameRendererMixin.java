@@ -21,18 +21,18 @@ public class GameRendererMixin {
 
 	@ModifyVariable(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;squaredDistanceTo(Lnet/minecraft/util/math/Vec3d;)D"), ordinal = 1)
 	private double cacheOriginalReach(double original) {
-		cachedOriginalReach = this.client.world != null && client.crosshairTarget instanceof BlockHitResult bhr && this.client.world.getBlockState(bhr.getBlockPos()).getCollisionShape(this.client.world, bhr.getBlockPos()).isEmpty() ? original : 0;
+		cachedOriginalReach = original;
 		return original;
 	}
 
 	@ModifyArg(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/ProjectileUtil;raycast(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;D)Lnet/minecraft/util/hit/EntityHitResult;"), index = 5)
 	private double useOriginalReachForEntityRaycast(double original) {
-		return cachedOriginalReach != 0 ? cachedOriginalReach : original;
+		return cachedOriginalReach;
 	}
 
 	@ModifyVariable(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/hit/EntityHitResult;getPos()Lnet/minecraft/util/math/Vec3d;"), ordinal = 1)
 	private Entity discardEmptyBlockHit(Entity hitEntity, float tickDelta) {
-		if (cachedOriginalReach > 0.0F && this.client.player != null && this.client.player.squaredDistanceTo(hitEntity) < cachedOriginalReach && hitEntity instanceof LivingEntity && !hitEntity.isSpectator() && hitEntity.isAttackable() && !(hitEntity instanceof Tameable het && het.getOwnerUuid() == this.client.player.getUuid()) && !hitEntity.equals(this.client.player.getVehicle())) {
+		if (this.client.world != null && this.client.player != null && client.crosshairTarget instanceof BlockHitResult bhr && this.client.world.getBlockState(bhr.getBlockPos()).getCollisionShape(this.client.world, bhr.getBlockPos()).isEmpty() && this.client.player.squaredDistanceTo(hitEntity) < cachedOriginalReach && hitEntity instanceof LivingEntity && !hitEntity.isSpectator() && hitEntity.isAttackable() && !(hitEntity instanceof Tameable het && het.getOwnerUuid() == this.client.player.getUuid()) && !hitEntity.equals(this.client.player.getVehicle())) {
 			client.crosshairTarget = null;
 		}
 		return hitEntity;
