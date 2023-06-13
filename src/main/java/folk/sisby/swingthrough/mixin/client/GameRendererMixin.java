@@ -32,7 +32,7 @@ public class GameRendererMixin {
 
 	@ModifyVariable(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/hit/EntityHitResult;getPos()Lnet/minecraft/util/math/Vec3d;"), ordinal = 1)
 	private Entity discardEmptyBlockHit(Entity hitEntity, float tickDelta) {
-		if (this.client.player != null && this.client.player.squaredDistanceTo(hitEntity) < cachedOriginalReach && hitEntity instanceof LivingEntity && !hitEntity.isSpectator() && hitEntity.isAttackable() && !(hitEntity instanceof Tameable het && het.getOwnerUuid() == this.client.player.getUuid()) && !hitEntity.equals(this.client.player.getVehicle())) {
+		if (cachedOriginalReach > 0.0F && this.client.player != null && this.client.player.squaredDistanceTo(hitEntity) < cachedOriginalReach && hitEntity instanceof LivingEntity && !hitEntity.isSpectator() && hitEntity.isAttackable() && !(hitEntity instanceof Tameable het && het.getOwnerUuid() == this.client.player.getUuid()) && !hitEntity.equals(this.client.player.getVehicle())) {
 			client.crosshairTarget = null;
 		}
 		return hitEntity;
