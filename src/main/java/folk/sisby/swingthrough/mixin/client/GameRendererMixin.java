@@ -4,7 +4,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Tameable;
 import net.minecraft.util.hit.BlockHitResult;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,7 +31,7 @@ public class GameRendererMixin {
 
 	@ModifyVariable(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/hit/EntityHitResult;getPos()Lnet/minecraft/util/math/Vec3d;"), ordinal = 1)
 	private Entity discardEmptyBlockHit(Entity hitEntity, float tickDelta) {
-		if (this.client.world != null && this.client.player != null && client.crosshairTarget instanceof BlockHitResult bhr && this.client.world.getBlockState(bhr.getBlockPos()).getCollisionShape(this.client.world, bhr.getBlockPos()).isEmpty() && this.client.player.squaredDistanceTo(hitEntity) < cachedOriginalReach && hitEntity instanceof LivingEntity && !hitEntity.isSpectator() && hitEntity.isAttackable() && !(hitEntity instanceof Tameable het && het.getOwnerUuid() == this.client.player.getUuid()) && !hitEntity.equals(this.client.player.getVehicle())) {
+		if (this.client.world != null && this.client.player != null && client.crosshairTarget instanceof BlockHitResult bhr && this.client.world.getBlockState(bhr.getBlockPos()).getCollisionShape(this.client.world, bhr.getBlockPos()).isEmpty() && this.client.player.squaredDistanceTo(hitEntity) < cachedOriginalReach && hitEntity instanceof LivingEntity && !hitEntity.isSpectator() && hitEntity.isAttackable() && !hitEntity.equals(this.client.player.getVehicle())) {
 			client.crosshairTarget = null;
 		}
 		return hitEntity;
