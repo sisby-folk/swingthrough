@@ -20,10 +20,10 @@ Due to the way this is implemented, the block outline will also visually disappe
 
 #### Technical Notes
 
-This mod is comprised of a [single mixin](https://github.com/sisby-folk/swingthrough/blob/1.19/src/main/java/folk/sisby/swingthrough/mixin/client/GameRendererMixin.java) containing 4 lines of meaningful code **total**. Including:
+This mod is comprised of a [single mixin](https://github.com/sisby-folk/swingthrough/blob/1.19/src/main/java/folk/sisby/swingthrough/mixin/client/GameRendererMixin.java) with about 4 lines of meaningful code:
 
- - 2 lines of code to make entity targeting always use the full reach instead of shortening when a block target is found. 
- - 2 lines of code to discard the block target if the block and entity meet the conditions
+ - 2 lines to use the full entity targeting range if the block meets the conditions.
+ - 2 lines to discard the block target if the full range was used and the entity meets the conditions.
 
 It performs no additional raycasts or radius searches.
 
