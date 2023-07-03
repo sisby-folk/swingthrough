@@ -22,7 +22,7 @@ Due to the way this is implemented, the block outline will also visually disappe
 
 This mod is comprised of a [single mixin](https://github.com/sisby-folk/swingthrough/blob/1.19/src/main/java/folk/sisby/swingthrough/mixin/client/GameRendererMixin.java) with about 4 lines of meaningful code:
 
- - 2 lines to use the full entity targeting range if the block meets the conditions.
+ - 2 lines to use the full entity targeting range if the block meets the conditions (instead of stopping at the block).
  - 2 lines to discard the block target if the full range was used and the entity meets the conditions.
 
 It performs no additional raycasts or radius searches.
