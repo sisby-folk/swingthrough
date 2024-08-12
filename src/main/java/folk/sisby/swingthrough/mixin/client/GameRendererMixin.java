@@ -4,7 +4,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Tameable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,14 +21,14 @@ public class GameRendererMixin {
 		return original;
 	}
 
-	@ModifyArg(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/ProjectileUtil;raycast(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;D)Lnet/minecraft/util/hit/EntityHitResult;"), index = 5)
+	@ModifyArg(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ProjectileUtil;rayTrace(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;D)Lnet/minecraft/util/hit/EntityHitResult;"), index = 5)
 	private double useOriginalReachForEntityRaycast(double original) {
 		return swingthrough$reach == null ? original : swingthrough$reach;
 	}
 
 	@ModifyVariable(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/hit/EntityHitResult;getPos()Lnet/minecraft/util/math/Vec3d;"), ordinal = 1)
-	private Entity discardEmptyBlockHit(Entity hitEntity, float tickDelta) {
-		if (swingthrough$reach != null && MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().getCameraEntity().getCameraPosVec(tickDelta).squaredDistanceTo(hitEntity.getPos()) < swingthrough$reach && hitEntity instanceof LivingEntity && !hitEntity.isSpectator() && hitEntity.isAttackable() && !(hitEntity instanceof Tameable && ((Tameable) hitEntity).getOwnerUuid() == MinecraftClient.getInstance().player.getUuid()) && !hitEntity.equals(MinecraftClient.getInstance().player.getVehicle())) {
+	private Entity discardEmptyBlockHit(Entity hitEntity) {
+		if (swingthrough$reach != null && MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().getCameraEntity().getPos().squaredDistanceTo(hitEntity.getPos()) < swingthrough$reach && hitEntity instanceof LivingEntity && !hitEntity.isSpectator() && hitEntity.isAttackable() && !hitEntity.equals(MinecraftClient.getInstance().player.getVehicle())) {
 			MinecraftClient.getInstance().crosshairTarget = null;
 		}
 		return hitEntity;

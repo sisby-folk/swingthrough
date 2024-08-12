@@ -3,9 +3,9 @@ loom = "1.7.+"
 githubRelease = "2.4.1"
 minotaur = "2.+"
 
-mc = "1.19.2"
-fl = "0.15.0"
-yarn = "1.19.2+build.28"
+mc = "1.14.4"
+fl = "0.15.11"
+yarn = "1.14.4+build.18"
 
 [plugins]
 loom = { id = "fabric-loom", version.ref = "loom" }
