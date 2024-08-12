@@ -21,7 +21,7 @@ public class GameRendererMixin {
 		return original;
 	}
 
-	@ModifyArg(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ProjectileUtil;rayTrace(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;D)Lnet/minecraft/util/hit/EntityHitResult;"), index = 5)
+	@ModifyArg(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "method_18075", remap = false), index = 5)
 	private double useOriginalReachForEntityRaycast(double original) {
 		return swingthrough$reach == null ? original : swingthrough$reach;
 	}
