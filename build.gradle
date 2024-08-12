@@ -1,114 +1,85 @@
-buildscript {
-	repositories {
-		gradlePluginPortal()
-	}
-	dependencies {
-		classpath 'com.modrinth.minotaur:Minotaur:2.4.3'
-		classpath "com.github.breadmoirai:github-release:2.4.1"
-	}
-}
-
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection GroovyAccessibility
 plugins {
-	id 'maven-publish'
+	id "maven-publish"
 	alias libs.plugins.loom
+	alias libs.plugins.githubRelease
+	alias libs.plugins.minotaur
 }
 
-if (System.getenv("MODRINTH_TOKEN")) {
-	apply plugin: "com.modrinth.minotaur"
-}
-if (System.getenv("GITHUB_TOKEN")) {
-	apply plugin: "com.github.breadmoirai.github-release"
-}
-
-archivesBaseName = project.archives_base_name
-
-def mc_major = '1.19'
-def mc = mc_major + '.2'
-def default_branch = '1.19'
-
-def origVersion = project.version
-project.version = project.version + "+" + mc_major
-group = project.maven_group
-
-repositories {
-	maven { url "https://maven.terraformersmc.com/" }
-}
+version = "$baseVersion+$branch"
+archivesBaseName = project.archivesName
 
 dependencies {
-	// // Base // //
 	minecraft libs.mc
-	mappings variantOf(libs.qm) { classifier "intermediary-v2" }
-	modImplementation libs.ql
+	mappings variantOf(libs.yarn) { classifier "v2" }
+	modImplementation libs.fl
 }
 
 processResources {
-	final Map<String, String> map = [
-		"version"        : version.toString(),
+	final Map<String, String> meta = [
+		version       : version,
+		modId         : modId,
+		modName       : modName,
+		modDescription: modDescription,
+		homepage      : homepage,
+		issues        : issues,
+		sources       : sources,
+		license       : license,
+		authors       : authors.split(", ").join("\",\n    \""),
+		members       : "${authors}",
+		mc            : libs.versions.mc.get(),
+		fl            : libs.versions.fl.get()
 	]
-
-	inputs.properties(map)
-	filesMatching('quilt.mod.json') { expand(map) }
-	filesMatching('fabric.mod.json') { expand(map) }
+	inputs.properties(meta)
+	filesMatching("*.mod.json") { expand(meta) }
+	filesMatching("META-INF/*mods.toml") { expand(meta) }
 }
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = "UTF-8"
-	it.options.release = 17
+	it.options.release = 8
 }
 
 java {
 	withSourcesJar()
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 jar {
-	from("LICENSE.txt") {
+	from("LICENSE") {
 		rename { "${it}_${archivesBaseName}" }
 	}
 }
 
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
+modrinth {
+	token = System.getenv("MODRINTH_TOKEN")
+	projectId = project.name
+	versionNumber = project.version
+	uploadFile = remapJar
+	gameVersions = compatibleVersions.split(", ").toList()
+	loaders = compatibleLoaders.split(", ").toList()
+	dependencies {
 	}
-
-	repositories {
-
-	}
+	changelog = !file("CHANGELOG.md").exists() ? "" : rootProject.file("CHANGELOG.md").text + "\n\nChangelog: https://github.com/sisby-folk/$project.name/releases/tag/v$version"
+	syncBodyFrom = rootProject.file("README.md").text
 }
 
-if (System.getenv("MODRINTH_TOKEN")) {
-	modrinth {
-		token = System.getenv("MODRINTH_TOKEN")
-		projectId = 'swingthrough'
-		versionNumber = project.version
-		versionName = origVersion
-		versionType = 'release'
-		uploadFile = remapJar
-		gameVersions = ["1.18.2", "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4", "1.20"]
-		loaders = ['quilt', 'fabric']
-		detectLoaders = false
-		dependencies {
-		}
-		changelog = "Changelog: https://github.com/sisby-folk/swingthrough/releases/tag/v" + origVersion
-		syncBodyFrom = rootProject.file("README.md").text
-	}
+githubRelease {
+	token System.getenv("GITHUB_TOKEN")
+	owner "sisby-folk"
+	repo project.name
+	tagName "v" + version
+	releaseName version
+	targetCommitish branch
+	releaseAssets remapJar
+	generateReleaseNotes true
+	body !file("CHANGELOG.md").exists() ? "" : rootProject.file("CHANGELOG.md").text
 }
 
-if (System.getenv("GITHUB_TOKEN")) {
-	githubRelease {
-		token System.getenv("GITHUB_TOKEN")
-		owner "sisby-folk"
-		repo "swingthrough"
-		tagName 'v' + origVersion
-		releaseName origVersion
-		targetCommitish default_branch
-		draft false
-		prerelease false
-		releaseAssets remapJar.archiveFile
-		allowUploadToExisting true
-		generateReleaseNotes true
-	}
-	tasks.githubRelease.dependsOn remapJar
+tasks.register("fullRelease") {
+	group "publishing"
+	dependsOn "githubRelease"
+	dependsOn "modrinth"
 }
