@@ -14,10 +14,6 @@
 	},
 	"license": "${license}",
 	"icon": "assets/${modId}/icon.png",
-	"depends": {
-		"fabricloader": ">=0.5",
-		"minecraft": ">=1.14"
-	},
 	"mixins": [
 		"${modId}.mixins.json"
 	]
