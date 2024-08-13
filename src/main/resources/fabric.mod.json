@@ -16,7 +16,7 @@
 	"icon": "assets/${modId}/icon.png",
 	"depends": {
 		"fabricloader": ">=${fl}",
-		"minecraft": ">=1.20.2"
+		"minecraft": ">=${mc}"
 	},
 	"mixins": [
 		"${modId}.mixins.json"
