@@ -28,7 +28,7 @@ processResources {
 		license       : license,
 		authors       : authors.split(", ").join("\",\n    \""),
 		members       : "${authors}",
-		mc            : libs.versions.mc.get(),
+		mc            : compatibleVersions.split(", ")[0],
 		fl            : libs.versions.fl.get()
 	]
 	inputs.properties(meta)
