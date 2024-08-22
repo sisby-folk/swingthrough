@@ -2,8 +2,10 @@
 <center>
 <img alt="preview" src="https://cdn.modrinth.com/data/JyKlunuD/images/e1fb90dd7ba165b9043fbd4b752c42103dc9e7ef.png"/>
 Allows targeting living entities through transparent blocks.<br/>
-Requires <a href="https://modrinth.com/mod/connector">Connector</a> and <a href="https://modrinth.com/mod/forgified-fabric-api">FFAPI</a> on neoforge.<br/>
+Requires <a href="https://modrinth.com/mod/connector">Connector</a> on neoforge.<br/>
 </center>
+
+---
 
 This mod discards the block crosshair target to allow an entity to be targeted instead, when:
 
@@ -12,14 +14,14 @@ This mod discards the block crosshair target to allow an entity to be targeted i
 - You're not directly riding the entity
 - The entity is within reach (exact interaction range in 1.21)
 
-Due to the way this is implemented, the block outline will also visually disappear when you're targeting the entity instead.
+Thanks to this implementation, the block outline will also disappear while you're targeting the entity.
 
 #### Technical Notes
 
 This mod is comprised of a [single mixin](https://github.com/sisby-folk/swingthrough/blob/1.19/src/main/java/folk/sisby/swingthrough/mixin/client/GameRendererMixin.java) with about 4 lines of meaningful code:
 
-- 2 lines to use the full entity targeting range if the block meets the conditions (instead of stopping at the block).
-- 2 lines to discard the block target if the full range was used and the entity meets the conditions.
+- 2 lines to use the full entity targeting range if the block meets the conditions
+- 2 lines to discard the block target if the full range was used and the entity meets the conditions
 
 It performs no additional raycasts or radius searches.
 
