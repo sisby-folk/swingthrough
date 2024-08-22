@@ -8,7 +8,7 @@ plugins {
 }
 
 version = "$baseVersion+$branch"
-archivesBaseName = project.archivesName
+archivesBaseName = project.slug
 
 dependencies {
 	minecraft libs.mc
@@ -22,13 +22,13 @@ processResources {
 		modId         : modId,
 		modName       : modName,
 		modDescription: modDescription,
-		homepage      : homepage,
-		issues        : issues,
-		sources       : sources,
+		homepage      : "https://modrinth.com/mod/${slug}",
+		issues        : "https://github.com/${user}/${slug}/issues",
+		sources       : "https://github.com/${user}/${slug}",
 		license       : license,
 		authors       : authors.split(", ").join("\",\n    \""),
 		members       : "${authors}",
-		mc            : libs.versions.mc.get(),
+		mc            : compatibleVersions.split(", ")[0],
 		fl            : libs.versions.fl.get()
 	]
 	inputs.properties(meta)
@@ -43,7 +43,7 @@ tasks.withType(JavaCompile).configureEach {
 
 java {
 	withSourcesJar()
-	sourceCompatibility = JavaVersion.VERSION_1_8
+	sourceCompatibility = JavaVersion.VERSION_17
 	targetCompatibility = JavaVersion.VERSION_1_8
 }
 
@@ -53,29 +53,29 @@ jar {
 	}
 }
 
+githubRelease {
+	token = System.getenv("GITHUB_TOKEN")
+	owner = project.user
+	repo = slug
+	tagName = "v${baseVersion}+${tagBranch}"
+	targetCommitish = tagBranch
+	releaseAssets = remapJar
+	releaseName = "v${baseVersion}"
+	allowUploadToExisting = (tagBranch != branch)
+	body = !file("CHANGELOG.md").exists() ? "" : rootProject.file("CHANGELOG.md").text
+}
+
 modrinth {
 	token = System.getenv("MODRINTH_TOKEN")
-	projectId = project.name
+	projectId = slug
 	versionNumber = project.version
 	uploadFile = remapJar
 	gameVersions = compatibleVersions.split(", ").toList()
 	loaders = compatibleLoaders.split(", ").toList()
+	changelog = !file("CHANGELOG.md").exists() ? "" : rootProject.file("CHANGELOG.md").text + "\n\nChangelog: https://github.com/${user}/${slug}/releases/tag/v${baseVersion}+${tagBranch}"
+	syncBodyFrom = rootProject.file("README.md").text
 	dependencies {
 	}
-	changelog = !file("CHANGELOG.md").exists() ? "" : rootProject.file("CHANGELOG.md").text + "\n\nChangelog: https://github.com/sisby-folk/$project.name/releases/tag/v$version"
-	syncBodyFrom = rootProject.file("README.md").text
-}
-
-githubRelease {
-	token System.getenv("GITHUB_TOKEN")
-	owner "sisby-folk"
-	repo project.name
-	tagName "v" + version
-	releaseName version
-	targetCommitish branch
-	releaseAssets remapJar
-	generateReleaseNotes true
-	body !file("CHANGELOG.md").exists() ? "" : rootProject.file("CHANGELOG.md").text
 }
 
 tasks.register("fullRelease") {
