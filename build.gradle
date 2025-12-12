@@ -5,6 +5,7 @@ plugins {
 	alias libs.plugins.loom
 	alias libs.plugins.githubRelease
 	alias libs.plugins.minotaur
+	alias libs.plugins.curse
 }
 
 version = "$baseVersion+$branch"
@@ -72,10 +73,23 @@ modrinth {
 	uploadFile = remapJar
 	gameVersions = compatibleVersions.split(", ").toList()
 	loaders = compatibleLoaders.split(", ").toList()
-	changelog = !file("CHANGELOG.md").exists() ? "" : rootProject.file("CHANGELOG.md").text + "\n\nChangelog: https://github.com/${user}/${slug}/releases/tag/v${baseVersion}+${tagBranch}"
+	changelog = (!file("CHANGELOG.md").exists() || rootProject.file("CHANGELOG.md").text.isEmpty() ? "" : rootProject.file("CHANGELOG.md").text + "\n\n") + "Changelog: https://github.com/${user}/${slug}/releases/tag/v${baseVersion}+${tagBranch}"
 	syncBodyFrom = rootProject.file("README.md").text
 	dependencies {
 	}
+}
+
+tasks.register('curseforge', net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+	apiToken = "$System.env.CURSEFORGE_TOKEN"
+	disableVersionDetection()
+	def projectId = "1402841"
+	def mainFile = upload(projectId, remapJar)
+	compatibleLoaders.split(", ").toList().forEach { mainFile.addModLoader(it) }
+	compatibleVersions.split(", ").toList().forEach { mainFile.addGameVersion(it) }
+	mainFile.addEnvironment("client")
+	mainFile.changelog = (!file("CHANGELOG.md").exists() || rootProject.file("CHANGELOG.md").text.isEmpty() ? "" : rootProject.file("CHANGELOG.md").text + "\n\n") + "Changelog: https://github.com/${user}/${slug}/releases/tag/v${baseVersion}+${tagBranch}"
+	mainFile.changelogType = "markdown"
+	mainFile.releaseType = "release"
 }
 
 tasks.register("fullRelease") {
